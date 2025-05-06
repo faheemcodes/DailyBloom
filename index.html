@@ -200,6 +200,10 @@
             color: var(--text-primary);
         }
 
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
         .btn {
             font-weight: 600;
             padding: 0.75rem 1.75rem;
@@ -378,12 +382,12 @@
 
                         <div class="col-md-3">
                             <label for="plannedTime" class="form-label">Planned Time (minutes)</label>
-                            <input type="number" class="form-control" id="plannedTime" min="1" placeholder="30" required>
+                            <input type="number" class="form-control" id="plannedTime" min="1" placeholder="Slect time in digits" required>
                         </div>
 
                         <div class="col-md-3">
                             <label for="actualTime" class="form-label">Actual Time (minutes)</label>
-                            <input type="number" class="form-control" id="actualTime" min="1" placeholder="35" required>
+                            <input type="number" class="form-control" id="actualTime" min="1" placeholder="Slect time in digits" required>
                         </div>
 
                         <div class="col-md-4">
