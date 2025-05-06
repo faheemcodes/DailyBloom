@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DailyBloom - Smart Daily Planner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d4f;
+            --primary-dark: #e84345;
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --surface: #2d2d2d;
+            --text-primary: #f5f5f5;
+            --text-secondary: #b0b0b0;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #F44336;
+            --border-radius: 12px;
+            --text-muted: #a8a6a6;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .navbar {
+            background-color: var(--surface);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            padding: 0.8rem 0;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand span {
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover {
+            color: var(--primary);
+        }
+
+        .navbar-brand:hover span {
+            color: var(--primary);
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            margin: 0 0.2rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background-color: rgba(255, 77, 79, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 0 1.5rem;
+        }
+
+        .section {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-text {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .on-time {
+            border-left: 4px solid var(--success);
+        }
+
+        .delayed {
+            border-left: 4px solid var(--danger);
+        }
+
+        .early {
+            border-left: 4px solid var(--warning);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(255, 77, 79, 0.25);
+        }
+
+        .form-select option {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        .btn {
+            font-weight: 600;
+            padding: 0.75rem 1.75rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .badge {
+            font-weight: 500;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+        }
+
+        .badge-day {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .badge-success {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--danger);
+        }
+
+        .time-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .time-indicator i {
+            margin-right: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 1.5rem 0;
+        }
+
+        footer {
+            background-color: var(--surface);
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            opacity: 0.7;
+        }
+
+        .about-items {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            transition: var(--transition);      
+            
+        }
+
+        .about-items:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-items p {
+            margin-bottom: 0;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            
+            .section {
+                padding: 2rem 0;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container navbar-container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-calendar-day me-2"></i>Daily<span>Bloom</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#activities"><i class="fas fa-tasks me-1"></i> My Activities</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about"><i class="fas fa-info-circle me-1"></i> About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Form Section -->
+        <section class="section" id="home">
+            <div class="container">
+                <h2 class="section-title">Plan Your Day</h2>
+                <form id="activityForm">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label for="activityName" class="form-label">Activity Name</label>
+                            <input type="text" class="form-control" id="activityName" placeholder="Enter activity name" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="plannedTime" class="form-label">Planned Time (minutes)</label>
+                            <input type="number" class="form-control" id="plannedTime" min="1" placeholder="30" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="actualTime" class="form-label">Actual Time (minutes)</label>
+                            <input type="number" class="form-control" id="actualTime" min="1" placeholder="35" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="activityDay" class="form-label">Select Day</label>
+                            <select class="form-select" id="activityDay">
+                                <option>Monday</option>
+                                <option>Tuesday</option>
+                                <option>Wednesday</option>
+                                <option>Thursday</option>
+                                <option>Friday</option>
+                                <option>Saturday</option>
+                                <option>Sunday</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-8">
+                            <label for="activityPriority" class="form-label">Priority</label>
+                            <div class="d-flex gap-2">
+                                <div class="form-check">
+                                    <input class="form-check-input radio" type="radio" name="priority" id="priorityLow" value="low" checked>
+                                    <label class="form-check-label" for="priorityLow">
+                                        Low
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input radio" type="radio" name="priority" id="priorityMedium" value="medium">
+                                    <label class="form-check-label" for="priorityMedium">
+                                        Medium
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input radio" type="radio" name="priority" id="priorityHigh" value="high">
+                                    <label class="form-check-label" for="priorityHigh">
+                                        High
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="actionPlan" class="form-label">Action Plan</label>
+                            <textarea class="form-control" id="actionPlan" rows="3" placeholder="Describe your plan..."></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="reason" class="form-label">Reason for Time Difference</label>
+                            <textarea class="form-control" id="reason" rows="3" placeholder="Explain any time differences..."></textarea>
+                        </div>
+
+                        <div class="col-12 text-end">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fas fa-plus-circle me-2"></i>Add Activity
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Activity List Section -->
+        <section class="section" id="activities">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="section-title">My Activities</h2>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-filter me-1"></i>Filter
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" data-filter="all">All Activities</a></li>
+                            <li><a class="dropdown-item" href="#" data-filter="on-time">On Time</a></li>
+                            <li><a class="dropdown-item" href="#" data-filter="early">Early</a></li>
+                            <li><a class="dropdown-item" href="#" data-filter="delayed">Delayed</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div id="activityList">
+                    <div class="empty-state">
+                        <i class="fas fa-tasks"></i>
+                        <h4>No activities yet</h4>
+                        <p>Add your first activity to get started</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <div class="container">
+                <h2 class="section-title">About DailyBloom</h2>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4 class="mb-3" style="color: #e05a5a; font-weight: 600;">Your Intelligent Time Management Partner</h4>
+                        <p class="mb-4">
+                            DailyBloom is designed with emotional intelligence and personal growth in mind, empowering users to plan, track, 
+                            and reflect on daily activities. Unlike generic planners, it encourages awareness of discrepancies between planned 
+                            and actual performance, helping identify habits and patterns that influence productivity.
+                        </p>
+                        <div class="d-flex align-items-center mb-3 about-items">
+                            <div class="me-3 text-primary">
+                                <i class="fas fa-chart-line fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 style="font-weight: 600;">Performance Analytics</h6>
+                                <p class="small ">Track your efficiency trends over time</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3 about-items">
+                            <div class="me-3 text-primary">
+                                <i class="fas fa-brain fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 style="font-weight: 600;">Cognitive Awareness</h6>
+                                <p class="small ">Understand your planning patterns</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h4 class="mb-3" style="color: #e05a5a; font-weight: 600;">Who Can Benefit</h4>
+                        <p class="mb-4">
+                            Whether you're a student, professional, or someone looking to bring structure to your routine, DailyBloom
+                            provides clarity through detailed inputs and insightful differences. Its dark theme ensures comfortable
+                            usability throughout the day or night, while its clean, intuitive interface keeps planning stress-free.
+                        </p>
+                        <div class="d-flex align-items-center mb-3 about-items">
+                            <div class="me-3 text-primary">
+                                <i class="fas fa-seedling fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 style="font-weight: 600;">Growth Mindset</h6>
+                                <p class="small ">Cultivate better time management habits</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center about-items">
+                            <div class="me-3 text-primary">
+                                <i class="fas fa-balance-scale fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 style="font-weight: 600;">Work-Life Balance</h6>
+                                <p class="small ">Achieve harmony in your daily schedule</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="row">
+                <div class="col-md-6 text-md-start text-center mb-3 mb-md-0">
+                    <a class="navbar-brand" href="#">
+                        <i class="fas fa-calendar-day me-2"></i>Daily<span>Bloom</span>
+                    </a>
+                </div>
+                <div class="col-md-6 text-md-end text-center">
+                    <p class="mb-0">&copy; 2025 DailyBloom. All rights reserved.</p>
+                    <p class="small mb-0">Designed with <i class="fas fa-heart text-danger"></i> for productive minds</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Form submission
+            document.getElementById("activityForm").addEventListener("submit", function(e) {
+                e.preventDefault();
+
+                const name = document.getElementById("activityName").value.trim();
+                const planned = parseInt(document.getElementById("plannedTime").value);
+                const actual = parseInt(document.getElementById("actualTime").value);
+                const day = document.getElementById("activityDay").value;
+                const plan = document.getElementById("actionPlan").value.trim();
+                const reason = document.getElementById("reason").value.trim();
+                const priority = document.querySelector('input[name="priority"]:checked').value;
+
+                const difference = actual - planned;
+                let status, statusClass, badgeClass, icon;
+                
+                if (difference === 0) {
+                    status = 'On Time';
+                    statusClass = 'on-time';
+                    badgeClass = 'badge-success';
+                    icon = 'fa-check-circle';
+                } else if (difference < 0) {
+                    status = `${Math.abs(difference)} min early`;
+                    statusClass = 'early';
+                    badgeClass = 'badge-warning';
+                    icon = 'fa-clock';
+                } else {
+                    status = `${difference} min delayed`;
+                    statusClass = 'delayed';
+                    badgeClass = 'badge-danger';
+                    icon = 'fa-exclamation-circle';
+                }
+
+                // Priority badge
+                let priorityBadge;
+                switch(priority) {
+                    case 'low':
+                        priorityBadge = '<span class="badge bg-secondary me-2">Low</span>';
+                        break;
+                    case 'medium':
+                        priorityBadge = '<span class="badge bg-primary me-2">Medium</span>';
+                        break;
+                    case 'high':
+                        priorityBadge = '<span class="badge bg-danger me-2">High</span>';
+                        break;
+                }
+
+                // Remove empty state if it exists
+                const emptyState = document.querySelector('.empty-state');
+                if (emptyState) {
+                    emptyState.remove();
+                }
+
+                const activityHTML = `
+                    <div class="card ${statusClass} activity-card" data-status="${statusClass}">
+                        <div class="card-header">
+                            <div>
+                                ${priorityBadge}
+                                <span class="badge badge-day">${day}</span>
+                            </div>
+                            <span class="badge ${badgeClass}">
+                                <i class="fas ${icon} me-1"></i>${status}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-tasks me-2"></i>${name}
+                            </h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="card-text"><strong>Planned Time:</strong> ${planned} minutes</p>
+                                    <p class="card-text"><strong>Actual Time:</strong> ${actual} minutes</p>
+                                    <p class="card-text"><strong>Difference:</strong> ${Math.abs(difference)} minutes 
+                                        (${difference > 0 ? 'over' : 'under'})</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text"><strong>Action Plan:</strong> ${plan || 'Not specified'}</p>
+                                    <p class="card-text"><strong>Reason for Difference:</strong> ${reason || 'Not specified'}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="divider"></div>
+                            
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-sm btn-outline-danger delete-btn">
+                                    <i class="fas fa-trash-alt me-1"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById("activityList").insertAdjacentHTML("beforeend", activityHTML);
+                e.target.reset();
+                
+                // Scroll to the new activity
+                document.querySelector('.activity-card:last-child').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+
+            // Filter activities
+            document.querySelectorAll('[data-filter]').forEach(filter => {
+                filter.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const filterValue = this.getAttribute('data-filter');
+                    const activities = document.querySelectorAll('.activity-card');
+                    
+                    activities.forEach(activity => {
+                        if (filterValue === 'all') {
+                            activity.style.display = 'block';
+                        } else {
+                            if (activity.getAttribute('data-status') === filterValue) {
+                                activity.style.display = 'block';
+                            } else {
+                                activity.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Delete activity (event delegation)
+            document.getElementById('activityList').addEventListener('click', function(e) {
+                if (e.target.closest('.delete-btn')) {
+                    const card = e.target.closest('.activity-card');
+                    card.style.opacity = '0';
+                    setTimeout(() => {
+                        card.remove();
+                        
+                        // Show empty state if no activities left
+                        if (document.querySelectorAll('.activity-card').length === 0) {
+                            const emptyHTML = `
+                                <div class="empty-state">
+                                    <i class="fas fa-tasks"></i>
+                                    <h4>No activities found</h4>
+                                    <p>Try changing your filters or add new activities</p>
+                                </div>
+                            `;
+                            this.insertAdjacentHTML('beforeend', emptyHTML);
+                        }
+                    }, 300);
+                }
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
