@@ -41,6 +41,6 @@ An intelligent time management application that helps you track, analyze, and im
 To run locally:
 
 ```bash
-git clone [repository-url]
+git clone https://github.com/faheemcodes/DailyBloom.git
 cd DailyBloom
 # Open index.html in your browser
